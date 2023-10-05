@@ -83,11 +83,21 @@ if __name__ == '__main__':
         print("Listening...")
         query = takeCommand()
         # todo: Add more sites
-        sites = [["youtube", "https://www.youtube.com"], ["wikipedia", "https://www.wikipedia.com"], ["google", "https://www.google.com"],["Instagram","https://www.instagram.com"],["ChatGpt","https://chat.openai.com/?model=text-davinci-002-render-sha"],["GitHub","https://github.com"],["Gmail","https://mail.google.com/mail/u/0/#inbox"] ]
-        for site in sites:
-            if f"Open {site[0]}".lower() in query.lower():
-                say(f"Opening {site[0]} sir...")
-                webbrowser.open(site[1])
+        sites={
+            "youtube": "https://www.youtube.com",
+            "wikipedia": "https://www.wikipedia.com",
+            "google": "https://www.google.com",
+            "instagram": "https://www.instagram.com",
+            "chatgpt": "https://chat.openai.com/?model=text-davinci-002-render-sha",
+            "github": "https://github.com/Aaditya-5281",
+            "gmail": "https://mail.google.com/mail/u/0/#inbox",
+        }
+
+
+        for site in sites.keys():
+            if f"Open {site}".lower() in query.lower():
+                say(f"Opening {site} sir...")
+                webbrowser.open(sites.get(site))
         # todo: Add a feature to play a specific song
         if "music" in query:
             musicPath = "p.mp3"
@@ -105,14 +115,14 @@ if __name__ == '__main__':
             print("DATE:",f"Today is {day}")
             #say(date)
 
-        # Mac Application
+        # windows Application opening
         elif "Notepad".lower() in query.lower():
             os.system("C:/Windows/notepad.exe")
-
+        # Openai API 
         elif "Using artificial intelligence".lower() in query.lower():
             ai(prompt=query)
 
-        elif "Fuck off".lower() in query.lower():
+        elif "exit".lower() in query.lower():
             exit()
 
         elif "reset chat".lower() in query.lower():
