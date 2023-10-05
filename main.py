@@ -113,7 +113,7 @@ if __name__ == '__main__':
             month = datetime.datetime.now().month
             year = datetime.datetime.now().year
             print("DATE:",f"Today is {day}")
-            #say(date)
+            say(date)
 
         # windows Application opening
         elif "Notepad".lower() in query.lower():
