@@ -3,18 +3,19 @@ import speech_recognition as sr
 import os
 import webbrowser
 import openai
+import pywhatkit
 
 import datetime
 import random
 
-apikey = "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"
+apikey = "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"
 chatStr = ""
 # https://youtu.be/Z3ZAJoi4x6Q
 def chat(query):
     global chatStr
     print(chatStr)
     openai.api_key = apikey
-    chatStr += f"Harry: {query}\n Jarvis: "
+    chatStr += f"Aaditya: {query}\n Jarvis: "
     response = openai.Completion.create(
         model="text-davinci-003",
         prompt= chatStr,
@@ -55,8 +56,8 @@ def ai(prompt):
 
 def say(text):
     engine = pyttsx3.init()
-    engine.setProperty('rate', 150)
-    engine.setProperty('volume', 1.0)
+    engine.setProperty('rate', 160)
+    engine.setProperty('volume', 2.0)
     voices = engine.getProperty('voices')
     engine.setProperty('voice', voices[1].id)
     engine.say(text)
@@ -72,65 +73,78 @@ def takeCommand():
             print("Recognizing...")
             query = r.recognize_google(audio, language="en-in")
             print(f"User said: {query}")
-            return query
+            say(f"{query}")
+            return query,True
         except Exception as e:
-            return "Some Error Occurred. Sorry from Jarvis"
+            return "Some Error Occurred. Sorry from Jarvis",False
 
 if __name__ == '__main__':
     print('Welcome to Jarvis A.I')
     say("Jarvis A.I")
     while True:
         print("Listening...")
-        query = takeCommand()
+        query,response = takeCommand()
         # todo: Add more sites
-        sites={
-            "youtube": "https://www.youtube.com",
-            "wikipedia": "https://www.wikipedia.com",
-            "google": "https://www.google.com",
-            "instagram": "https://www.instagram.com",
-            "chatgpt": "https://chat.openai.com/?model=text-davinci-002-render-sha",
-            "github": "https://github.com/Aaditya-5281",
-            "gmail": "https://mail.google.com/mail/u/0/#inbox",
-        }
+        if response==True:
+            sites={
+                "youtube": "https://www.youtube.com",
+                "wikipedia": "https://www.wikipedia.com",
+                "google": "https://www.google.com",
+                "instagram": "https://www.instagram.com",
+                "chatgpt": "https://chat.openai.com/?model=text-davinci-002-render-sha",
+                "github": "https://github.com/Aaditya-5281",
+                "gmail": "https://mail.google.com/mail/u/0/#inbox",
+            }
 
 
-        for site in sites.keys():
-            if f"Open {site}".lower() in query.lower():
-                say(f"Opening {site} sir...")
-                webbrowser.open(sites.get(site))
-        # todo: Add a feature to play a specific song
-        if "music" in query:
-            musicPath = "p.mp3"
-            os.system(f"start {musicPath}")
+            for site in sites.keys():
+                if f"Open {site}".lower() in query.lower():
+                    say(f"Opening {site} sir...")
+                    webbrowser.open(sites.get(site))
+            # todo: Add a feature to play a specific song
+            if "music" in query:
+                musicPath = "p.mp3"
+                os.system(f"start {musicPath}")
 
-        elif "time" in query:
-            time = datetime.datetime.now().strftime("%I:%M %p")
-            print("Time:",f"{time}")
-            say(time)
+            elif "time" in query:
+                time = datetime.datetime.now().strftime("%I:%M %p")
+                print("Time:",f"{time}")
+                say(f"The Time is {time}")
 
-        elif "date" in query:
-            day = datetime.datetime.now().day
-            month = datetime.datetime.now().month
-            year = datetime.datetime.now().year
-            print("DATE:",f"Today is {day}")
-            say(date)
+            elif "How r u".lower() in query.lower():
+                print("I am Fine Sir")
+                say(f"I am Fine Sir")
 
-        # windows Application opening
-        elif "Notepad".lower() in query.lower():
-            os.system("C:/Windows/notepad.exe")
-        # Openai API 
-        elif "Using artificial intelligence".lower() in query.lower():
-            ai(prompt=query)
+            elif "date" in query:
+                day = datetime.datetime.now().day
+                month = datetime.datetime.now().month
+                year = datetime.datetime.now().year
+                print("DATE:",f"Today is {day}")
+                say(f"Today is {day}")
 
-        elif "exit".lower() in query.lower():
-            exit()
+            # windows Application opening
+            elif "Open Notepad".lower() in query.lower():
+                say(f"Opening Notepad")
+                os.system("C:/Windows/notepad.exe")
 
-        elif "reset chat".lower() in query.lower():
-            chatStr = ""
+            elif "Open Whatsapp".lower() in query.lower():
+                say(f"Opening Whatsapp")
+                os.system("C:/Windows/WhatsApp.exe")
 
-        else:
-            print("Chatting...")
-            chat(query)
+            # Openai API
+            elif "Using artificial intelligence".lower() in query.lower():
+                ai(prompt=query)
+
+            elif "exit".lower() in query.lower():
+                exit()
+
+            elif "reset chat".lower() in query.lower():
+                chatStr = ""
+
+            else:
+                print("Processing...")
+                search={query}
+                pywhatkit.search(search)
 
 
 
